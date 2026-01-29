@@ -1,0 +1,15 @@
+[project]
+name = "tqdm-osc94"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Tanner Klipstein", email = "64111041+TTkindboy@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "tqdm>=4.67.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.27,<0.10.0"]
+build-backend = "uv_build"
