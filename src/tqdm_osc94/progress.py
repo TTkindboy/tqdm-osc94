@@ -9,10 +9,11 @@ ST = "\x1b\\"
 
 class OSC94State(IntEnum):
     """OSC 9;4 progress indicator states for Windows Terminal."""
-    CLEAR = 0 # No progress indicator / clear
-    NORMAL = 1 # Normal progress (requires percentage) 
-    ERROR = 2 # Error state
-    INDETERMINATE = 3 # Indeterminate progress (cannot be set with percentage)
+
+    CLEAR = 0  # No progress indicator / clear
+    NORMAL = 1  # Normal progress (requires percentage)
+    ERROR = 2  # Error state
+    INDETERMINATE = 3  # Indeterminate progress (cannot be set with percentage)
     PAUSED = 4  # Paused/Warning state
 
 
@@ -20,8 +21,9 @@ class tqdm_osc94(tqdm):
     """tqdm subclass that can send OSC 9;4 progress updates to the terminal."""
 
     @override
-    def __init__(self, *args, osc94: bool = True, **kwargs):
+    def __init__(self, *args, osc94: bool = True, show_bar: bool = True, **kwargs):
         self.osc94 = osc94
+        self.show_bar = show_bar
         super().__init__(*args, **kwargs)
 
     def _osc94_write(self, state: OSC94State, progress: int | None):
@@ -47,13 +49,12 @@ class tqdm_osc94(tqdm):
             self._osc94_write(OSC94State.INDETERMINATE, None)
 
     @override
-    def refresh(self, *args, **kwargs):
+    def display(self, *args, **kwargs):
         self._osc94_update()
-        super().refresh(*args, **kwargs)
+        if self.show_bar:
+            super().display(*args, **kwargs)
 
     @override
     def close(self):
-        self._osc94_update()
         self._osc94_write(OSC94State.CLEAR, None)
         return super().close()
-    
