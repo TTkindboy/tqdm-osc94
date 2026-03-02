@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Tooling files
+.ruff_cache/
+.pytest_cache/

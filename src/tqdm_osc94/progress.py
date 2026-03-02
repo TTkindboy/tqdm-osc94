@@ -56,5 +56,8 @@ class tqdm_osc94(tqdm):
 
     @override
     def close(self):
-        self._osc94_write(OSC94State.CLEAR, None)
-        return super().close()
+        if self.disable:
+            return
+        if self.osc94:
+            self._osc94_write(OSC94State.CLEAR, None)
+        super().close()
